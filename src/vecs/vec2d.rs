@@ -1,6 +1,7 @@
 use crate::NumVec;
 use alloc::vec;
 use alloc::vec::Vec;
+use core::ops::Index;
 use num_traits::Float;
 
 /// Basic 2D Vector
@@ -112,6 +113,30 @@ impl<T: NumVec> Vec2D<T> where T: Float {
     }
 }
 
+impl<T: NumVec> Index<usize> for Vec2D<T> {
+    type Output = T;
+
+    fn index(&self, index: usize) -> &Self::Output {
+        match index { 
+            0 => &self.x,
+            1 => &self.y,
+            _ => panic!("index out of bounds: {}", index),
+        }
+    }
+}
+
+impl<T: NumVec> Index<i32> for Vec2D<T> {
+    type Output = T;
+
+    fn index(&self, index: i32) -> &Self::Output {
+        match index {
+            0 => &self.x,
+            1 => &self.y,
+            _ => panic!("index out of bounds: {}", index),
+        }
+    }
+}
+
 impl<T: NumVec> Default for Vec2D<T> {
     fn default() -> Self {
         Vec2D::new(T::zero(), T::zero())
@@ -159,7 +184,6 @@ impl<T: NumVec> TryFrom<Vec<T>> for Vec2D<T> {
         }
     }
 }
-
 
 impl<T: NumVec> From<Vec2D<T>> for (T,T) {
     fn from(value: Vec2D<T>) -> Self {

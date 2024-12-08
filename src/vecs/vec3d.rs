@@ -1,6 +1,7 @@
 use crate::NumVec;
 use alloc::vec;
 use alloc::vec::Vec;
+use core::ops::Index;
 use num_traits::Float;
 
 /// Basic 3D Vector
@@ -65,6 +66,32 @@ impl<T: NumVec> Vec3D<T> where T: Float {
 
     pub fn angle_between(&self, other: &Vec3D<T>) -> T {
         (self.dot(other) / (self.magnitude() * other.magnitude())).acos()
+    }
+}
+
+impl<T: NumVec> Index<usize> for Vec3D<T> {
+    type Output = T;
+
+    fn index(&self, index: usize) -> &Self::Output {
+        match index {
+            0 => &self.x,
+            1 => &self.y,
+            2 => &self.z,
+            _ => panic!("index out of bounds: {}", index),
+        }
+    }
+}
+
+impl<T: NumVec> Index<i32> for Vec3D<T> {
+    type Output = T;
+
+    fn index(&self, index: i32) -> &Self::Output {
+        match index {
+            0 => &self.x,
+            1 => &self.y,
+            2 => &self.z,
+            _ => panic!("index out of bounds: {}", index),
+        }
     }
 }
 

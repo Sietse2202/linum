@@ -14,8 +14,8 @@ pub mod prelude {
     pub use crate::NumVec;
 }
 
-pub trait NumVec: Num + NumCast + Copy {}
-impl<T: Num + NumCast + Copy> NumVec for T {}
+pub trait NumVec: Num + NumCast + Copy + core::fmt::Display {}
+impl<T: Num + NumCast + Copy + core::fmt::Display> NumVec for T {}
 
 #[cfg(test)]
 mod tests {
