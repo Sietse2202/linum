@@ -4,14 +4,8 @@ use alloc::vec::Vec;
 use num_traits::Float;
 
 /// Basic 2D Vector
-/// 
-/// # Examples
-/// ```Rust
-/// use compass::prelude::*
-/// fn main() {
-///     
-/// }
-/// ```
+/// Supports both Floats and Ints, but it's advised to use Floats,
+/// this is purely because it supports rotation and magnitude
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Vec2D<T: NumVec> {
     pub x: T,

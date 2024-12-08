@@ -51,6 +51,7 @@ impl<T: NumVec> Vec3D<T> {
         }
     }
     
+    /// Dot-Product of the two vectors
     pub fn dot(&self, other: &Vec3D<T>) -> T {
         self.x * other.x + self.y * other.y + self.z * other.z
     }
@@ -107,6 +108,7 @@ impl<T: NumVec> From<Vec<T>> for Vec3D<T> {
 impl<T: NumVec> core::ops::Mul<Self> for Vec3D<T> {
     type Output = Vec3D<T>;
 
+    /// Cross-Product of the two vectors
     fn mul(self, rhs: Self) -> Self::Output {
         Vec3D {
             x: self.y * rhs.z - self.z * rhs.y,
@@ -119,6 +121,7 @@ impl<T: NumVec> core::ops::Mul<Self> for Vec3D<T> {
 impl<T: NumVec> core::ops::Mul<T> for Vec3D<T> {
     type Output = Vec3D<T>;
 
+    /// Multiplies the Vector by the Scalar
     fn mul(self, rhs: T) -> Self::Output {
         Vec3D {
             x: self.x * rhs,
