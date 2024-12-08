@@ -1,6 +1,7 @@
+use crate::NumVec;
 use alloc::vec;
 use alloc::vec::Vec;
-use num_traits::{Float, Num, NumCast};
+use num_traits::Float;
 
 /// Basic 2D Vector
 /// 
@@ -12,21 +13,21 @@ use num_traits::{Float, Num, NumCast};
 /// }
 /// ```
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct Vec2D<T: Num + NumCast + Copy> {
+pub struct Vec2D<T: NumVec> {
     pub x: T,
     pub y: T,
 }
 
-pub fn vec2d<T: Num + NumCast + Copy>(x: T, y: T) -> Vec2D<T> {
+pub fn vec2d<T: NumVec>(x: T, y: T) -> Vec2D<T> {
     Vec2D { x, y }
 }
 
-impl<T: Num + NumCast + Copy> Vec2D<T> {
+impl<T: NumVec> Vec2D<T> {
     pub fn new(x: T, y: T) -> Vec2D<T> {
         Vec2D { x, y }
     }
 
-    pub fn cast<U: Num + NumCast + Copy>(self) -> Option<Vec2D<U>> {
+    pub fn cast<U: NumVec>(self) -> Option<Vec2D<U>> {
         Some(
             Vec2D {
                 x: U::from(self.x)?,
@@ -58,7 +59,7 @@ impl<T: Num + NumCast + Copy> Vec2D<T> {
         self.x * other.x + self.y * other.y
     }
 
-    pub fn angle_with(&self, other: &Vec2D<T>) -> T where T: Float {
+    pub fn angle_between(&self, other: &Vec2D<T>) -> T where T: Float {
         (self.dot(other) / (self.magnitude() * other.magnitude())).acos()
     }
 
@@ -79,7 +80,7 @@ impl<T: Num + NumCast + Copy> Vec2D<T> {
     }
 }
 
-impl<T: Num + NumCast + Copy> Vec2D<T> where T: Float {
+impl<T: NumVec> Vec2D<T> where T: Float {
     /// Returns the length of the given vector, only for `Vec<T> where T: Float`
     pub fn magnitude(&self) -> T {
         (self.x * self.x + self.y * self.y).sqrt()
@@ -117,13 +118,13 @@ impl<T: Num + NumCast + Copy> Vec2D<T> where T: Float {
     }
 }
 
-impl<T: Num + NumCast + Copy> Default for Vec2D<T> {
+impl<T: NumVec> Default for Vec2D<T> {
     fn default() -> Self {
         Vec2D::new(T::zero(), T::zero())
     }
 }
 
-impl<T: Num + NumCast + Copy> From<(T,T)> for Vec2D<T> {
+impl<T: NumVec> From<(T,T)> for Vec2D<T> {
     fn from(value: (T, T)) -> Self {
         Vec2D {
             x: value.0,
@@ -132,7 +133,7 @@ impl<T: Num + NumCast + Copy> From<(T,T)> for Vec2D<T> {
     }
 }
 
-impl<T: Num + NumCast + Copy> From<[T; 2]> for Vec2D<T> {
+impl<T: NumVec> From<[T; 2]> for Vec2D<T> {
     fn from(value: [T; 2]) -> Self {
         Vec2D {
             x: value[0],
@@ -141,7 +142,7 @@ impl<T: Num + NumCast + Copy> From<[T; 2]> for Vec2D<T> {
     }
 }
 
-impl<T: Num + NumCast + Copy> From<&[T; 2]> for Vec2D<T> {
+impl<T: NumVec> From<&[T; 2]> for Vec2D<T> {
     fn from(value: &[T; 2]) -> Self {
         Vec2D {
             x: value[0],
@@ -150,7 +151,7 @@ impl<T: Num + NumCast + Copy> From<&[T; 2]> for Vec2D<T> {
     }
 }
 
-impl<T: Num + NumCast + Copy> TryFrom<Vec<T>> for Vec2D<T> {
+impl<T: NumVec> TryFrom<Vec<T>> for Vec2D<T> {
     type Error = alloc::string::String;
 
     fn try_from(value: Vec<T>) -> Result<Self, Self::Error> {
@@ -166,25 +167,25 @@ impl<T: Num + NumCast + Copy> TryFrom<Vec<T>> for Vec2D<T> {
 }
 
 
-impl<T: Num + NumCast + Copy> From<Vec2D<T>> for (T,T) {
+impl<T: NumVec> From<Vec2D<T>> for (T,T) {
     fn from(value: Vec2D<T>) -> Self {
         (value.x, value.y)
     }
 }
 
-impl<T: Num + NumCast + Copy> From<Vec2D<T>> for [T; 2] {
+impl<T: NumVec> From<Vec2D<T>> for [T; 2] {
     fn from(value: Vec2D<T>) -> Self {
         [value.x, value.y]
     }
 }
 
-impl<T: Num + NumCast + Copy> From<Vec2D<T>> for Vec<T> {
+impl<T: NumVec> From<Vec2D<T>> for Vec<T> {
     fn from(value: Vec2D<T>) -> Self {
         vec![value.x, value.y]
     }
 }
 
-impl<T: Num + NumCast + Copy> core::ops::Mul<T> for Vec2D<T> {
+impl<T: NumVec> core::ops::Mul<T> for Vec2D<T> {
     type Output = Vec2D<T>;
 
     /// This returns the vector multiplied by the given scalar
@@ -196,7 +197,7 @@ impl<T: Num + NumCast + Copy> core::ops::Mul<T> for Vec2D<T> {
     }
 }
 
-impl<T: Num + NumCast + Copy> core::ops::Div<T> for Vec2D<T> {
+impl<T: NumVec> core::ops::Div<T> for Vec2D<T> {
     type Output = Vec2D<T>;
 
     /// This returns the vector divided by the given scalar
@@ -208,7 +209,7 @@ impl<T: Num + NumCast + Copy> core::ops::Div<T> for Vec2D<T> {
     }
 }
 
-impl<T: Num + NumCast + Copy> core::ops::Add for Vec2D<T> {
+impl<T: NumVec> core::ops::Add for Vec2D<T> {
     type Output = Vec2D<T>;
 
     /// Adds the two vectors and returns the sum
@@ -220,7 +221,7 @@ impl<T: Num + NumCast + Copy> core::ops::Add for Vec2D<T> {
     }
 }
 
-impl<T: Num + NumCast + Copy> core::ops::Sub for Vec2D<T> {
+impl<T: NumVec> core::ops::Sub for Vec2D<T> {
     type Output = Vec2D<T>;
 
     /// Subtracts the two vectors and returns the result

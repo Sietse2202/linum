@@ -1,6 +1,8 @@
 #![no_std]
 extern crate alloc;
 
+use num_traits::{Num, NumCast};
+
 pub mod vecs;
 
 pub mod prelude {
@@ -8,7 +10,12 @@ pub mod prelude {
     pub use crate::vecs::vec2d::*;
     #[allow(unused_imports)]
     pub use crate::vecs::vec3d::*;
+    #[allow(unused_imports)]
+    pub use crate::NumVec;
 }
+
+pub trait NumVec: Num + NumCast + Copy {}
+impl<T: Num + NumCast + Copy> NumVec for T {}
 
 #[cfg(test)]
 mod tests {
