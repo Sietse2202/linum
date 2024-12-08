@@ -1,4 +1,5 @@
 use crate::NumVec;
+use alloc::vec;
 use alloc::vec::Vec;
 use num_traits::Float;
 
@@ -50,7 +51,7 @@ impl<T: NumVec> Vec3D<T> {
             })
         }
     }
-    
+
     /// Dot-Product of the two vectors
     pub fn dot(&self, other: &Vec3D<T>) -> T {
         self.x * other.x + self.y * other.y + self.z * other.z
@@ -93,18 +94,40 @@ impl<T: NumVec> From<[T; 3]> for Vec3D<T> {
     }
 }
 
-impl<T: NumVec> From<Vec<T>> for Vec3D<T> {
-    fn from(value: Vec<T>) -> Self {
-        if value.len() != 3 {
-            panic!("Vec3D requires exactly 3 elements");
-        }
-        Vec3D {
-            x: value[0],
-            y: value[1],
-            z: value[2],
+impl<T: NumVec> TryFrom<Vec<T>> for Vec3D<T> {
+    type Error = alloc::string::String;
+
+    fn try_from(value: Vec<T>) -> Result<Self, Self::Error> {
+        if value.len() == 3 {
+            Ok(Vec3D {
+                x: value[0],
+                y: value[1],
+                z: value[2],
+            })
+        } else {
+            Err(alloc::format!("Expected Vec of length 3, got {}", value.len()))
         }
     }
 }
+
+impl<T: NumVec> From<Vec3D<T>> for (T,T,T) {
+    fn from(value: Vec3D<T>) -> Self {
+        (value.x, value.y, value.z)
+    }
+}
+
+impl<T: NumVec> From<Vec3D<T>> for [T; 3] {
+    fn from(value: Vec3D<T>) -> Self {
+        [value.x, value.y, value.z]
+    }
+}
+
+impl<T: NumVec> From<Vec3D<T>> for Vec<T> {
+    fn from(value: Vec3D<T>) -> Self {
+        vec![value.x, value.y, value.z]
+    }
+}
+
 impl<T: NumVec> core::ops::Mul<Self> for Vec3D<T> {
     type Output = Vec3D<T>;
 

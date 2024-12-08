@@ -85,7 +85,7 @@ mod tests {
             let normal_vec = alloc::vec![4u16, 5u16, 3u16];
             
             let vec1 = vec3d(2i64, 3i64, 13i64);
-            let vec2 = Vec3D::from(normal_vec);
+            let vec2 = Vec3D::try_from(normal_vec).unwrap_or(Vec3D::default());
             let result = vec1.cast().unwrap() + vec2;
             
             assert_eq!(result, vec3d(6u16, 8u16, 16u16));

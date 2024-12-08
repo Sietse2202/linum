@@ -1,5 +1,9 @@
 [package]
 name = "linum"
+description = "An open-source 2D-, and 3D-Vector Library."
+license = "GPL-3.0-or-later"
+repository = "https://github.com/Sietse2202/linum"
+readme = "README.md"
 version = "0.1.0"
 edition = "2021"
 
